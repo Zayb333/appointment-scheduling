@@ -1,0 +1,293 @@
+﻿
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1" />
+    <title>Appointment Scheduling</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="evo-calendar.css" />
+    <link rel="stylesheet" type="text/css" href="evo-calendar.midnight-blue.css" />
+    <link rel="stylesheet" type="text/css" href="evo-calendar.royal-navy.css" />  
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+</head>
+<body>
+
+    <div>
+        <div style="display:inline-block;justify-content:left;max-width:2px;">
+            <img src="mmlogo.png" style="height:auto;width:100px;background-color:transparent;" />
+        </div>
+        <header>
+            <div style="display:inline-block;">
+                <h2>Manis N Makeup</h2>
+                <p>Scheduling</p>
+                <nav>
+                    <a href="#calendar">Calendar</a>
+                    <a href="#add">Add Appointment</a>
+                    <a href="#view">View Appointments</a>
+                </nav>
+            </div>
+        </header>
+    </div>
+
+    <main>
+        <div class="hero">
+            <div id="calendar"></div>
+        </div>
+
+        <div class="add" id="add">
+
+
+            <div class="bf-body">
+
+                <div class="bf-head">
+                    <h1>New Appointment</h1>
+                    <p>Schedule a new appointment</p>
+                </div>
+
+                <div class="bf-body-box" onsubmit="addAppointment(this)">
+
+                    <div class="bf-row" id="clientInfo">
+                        <div class="bf-col-6">
+                            <p>Client Name</p>
+                            <input type="text" bind="value:_fclientName" id="fclientName" />
+                        </div>
+                        <div class="bf-col-6">
+                            <p>Contact</p>
+                            <input type="text" bind="value:_fclientContact" id="fclientContact" />
+                        </div>
+                    </div>
+
+                    <div class="bf-row" id="apptInfo">
+                        <div class="bf-col-6">
+                            <p>Date</p>
+                            <input type="date" bind="value:_fapptDate" id="fapptDate" />
+                        </div>
+                        <div class="bf-col-6">
+                            <p>Time</p>
+                            <input type="text" bind="value:_fapptTime" id="fapptTime" />
+                        </div>
+                    </div>
+
+                    <div class="bf-row" id="serviceInfo">
+                        <div class="bf-col-6">
+                            <p>Service</p>
+                            <select type="date" bind="value:_fapptService" id="fapptService">
+                                <option value="Hard Gel">Hard Gel</option>
+                                <option value="Gel X">Gel X</option>
+                                <option value="Hard Gel">Hard Gel</option>
+                                <option value="Gel Polish Mani">Gel Polish Mani</option>
+                                <option value="Brow Waxing">Brow Waxing</option>
+                                <option value="Makeup - Soft Glam">Makeup - Soft Glam</option>
+                                <option value="Makeup - Natural Glam">Makeup - Natural Glam</option>
+                                <option value="Makeup - Full Glam">Makeup - Full Glam</option>
+                                <option value="Makeup - Bridal Package">Makeup - Bridal Package</option>
+                            </select>
+                        </div>
+                        <div class="bf-col-6">
+                            <p>Price</p>
+                            <input type="text" bind="value:_fapptPrice" id="fapptPrice" />
+                        </div>
+                    </div>
+
+                    <div class="bf-row" id="paymentInfo">
+                        <div class="bf-col-6">
+                            <p>Deposit Paid</p>
+                            <input type="checkbox" bind="value:_fpaidDeposit" id="fpaidDeposit" />
+                        </div>
+                        <div class="bf-col-6">
+                            <p>Paid In Full</p>
+                            <input type="checkbox" bind="value:fpaidFull" id="fpaidFull" />
+                        </div>
+                    </div>
+
+                    <div class="bf-row" id="otherInfo">
+
+                        <div class="bf-col-12">
+
+                            <p>Notes</p>
+
+                            <textarea bind="_fapptNote" id="fapptNote" cols="10" rows="2"></textarea>
+
+                        </div>
+
+                    </div>
+
+                    <div class="bf-row" id="submitform">
+                        <div class="bf-col-3">
+                            <button class="btn-action" id="addBtn">ADD APPOINTMENT</button>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <div class="bf-footer">
+                    <p>Manis n Makeup</p>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="view" id="view">
+
+        </div>
+    </main>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/evo-calendar@1.1.2/evo-calendar/js/evo-calendar.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="evo-calendar.js"></script>
+
+    <script>// initialize your calendar, once the page's DOM is ready
+
+        var appointments = [];
+        var monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+
+        function getAppointments() {
+            
+            $.getJSON('appointments.json', function (json) {
+                var array = [];
+                for (var key in json) {
+                    if (json.hasOwnProperty(key)) {
+                        var item = json[key];
+                        array.push({
+                            name: item.name,
+                            description: item.description,
+                            date: item.date,
+                            type: item.type,
+                            id: item.id
+                        });
+                    }
+                }
+                return array;
+            });
+        };
+
+        $(document).ready(function () {
+            $('#calendar').evoCalendar({
+                format: "MM dd, yyyy",
+                theme: 'Royal Navy'
+            })
+            
+            $("#addBtn").click(function (a) {
+                var apptObj = {
+                    name: document.getElementById("fclientName").value,
+                    description: "Time: " + document.getElementById("fapptTime").value + "\nPrice: " + document.getElementById("fapptPrice").value + "\nDeposit Paid: " + document.getElementById("fpaidDeposit").value + "\nPaid In Full: " + document.getElementById("fpaidFull").value + "\nClient Contact: " + document.getElementById("fclientContact").value,
+                    date: parseDateToFormat(document.getElementById("fapptDate").value),
+                    type: document.getElementById("fapptService").value,
+                    id: document.getElementById("fclientName").value + "_" + document.getElementById("fapptDate").value + "_" + document.getElementById("fapptService").value
+                };
+                appointments.push(apptObj);
+                //saveAppointment(appointments);
+
+                $('#calendar').evoCalendar('addCalendarEvent', apptObj);
+            });
+
+            function parseDateToFormat(date) {
+                var year = date.substring(0, 4);
+                var monthNum = parseFloat(date.substring(5, 7));
+                var month = monthNames[monthNum - 1];
+                var day = date.substring(8);
+
+                return month + " " + day + ", " + year;
+            }
+
+            function saveAppointment(appt) {
+                const fs = require('fs');
+                const jsonString = JSON.stringify(appt);
+                fs.writeFile("./appointments.json", jsonString, 'utf8', function (err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+
+                    console.log("New appointment saved!");
+                });
+            }
+
+            
+        })
+    </script>
+
+
+    <script>const navLinks = document.querySelectorAll('nav a');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+
+                const target = e.target.getAttribute('href');
+                const duration = 800; // Adjust the duration as needed
+
+                smoothScrollAndCenter(target, duration);
+            });
+        });
+        // Smooth scrolling and centering function
+        function smoothScrollAndCenter(target, duration) {
+            const targetElement = document.querySelector(target);
+            const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+            const startPosition = window.scrollY;
+            const startTime = performance.now();
+
+            function easeInOutQuad(t) {
+                return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+            }
+
+            function animation(currentTime) {
+                const timeElapsed = currentTime - startTime;
+                const progress = Math.min(timeElapsed / duration, 1);
+                const easedProgress = easeInOutQuad(progress);
+
+                window.scrollTo(0, startPosition + (targetPosition - startPosition) * easedProgress);
+
+                if (timeElapsed < duration) {
+                    requestAnimationFrame(animation);
+                } else {
+                    // Calculate centering offset based on the window height
+                    const windowHeight = window.innerHeight;
+                    const targetHeight = targetElement.clientHeight;
+                    const offset = (windowHeight - targetHeight) / 2;
+
+                    // Scroll to the center of the target content
+                    window.scrollTo(0, targetPosition - offset);
+                }
+            }
+
+            requestAnimationFrame(animation);
+        }</script>
+    <script>function addAppointment(form) {
+
+            $('#calendar').evoCalendar('addCalendarEvent', {
+                name: document.getElementById("fclientName").value,
+                description: 'Time: ${document.getElementById("fapptTime").value} \nPrice: ${document.getElementById("fapptPrice").value} \nDeposit Paid: ${document.getElementById("fpaidDeposit").value} \nPaid In Full: ${document.getElementById("fpaidFull").value} \nClient Contact: ${document.getElementById("fclientContact").value}',
+                date: 'August 17, 2023',
+                type: document.getElementById("fapptService").value,
+                id: '${name}_${date}_${type}'
+            });
+        }</script>
+
+    <script>flatpickr("#fapptTime", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+        });</script>
+
+    <script>const srvcInput = document.getElementById("fapptService");
+
+        fapptService.addEventListener("change", function () {
+            const selectedService = srvcInput.value;
+            console.log("Selected service:", selectedService);
+            // You can use the selectedTime value as needed
+        });</script>
+
+
+</body>
+</html>
