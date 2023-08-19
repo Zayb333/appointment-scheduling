@@ -305,7 +305,7 @@ tbody tr:nth-child(even){
     }
 
     header{
-        height: 6.7%;
+        height: 18.5%;
     }
 
     #dprj{
@@ -314,10 +314,6 @@ tbody tr:nth-child(even){
 
     button.btn-action{
         font-size: 11px;
-    }
-     
-    header:hover, header:active {
-        height: 18.5%;
     }
 
     .table{
