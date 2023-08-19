@@ -33,8 +33,27 @@
     </div>
 
     <main>
+
+        <section class="dprj" id="dprj">
+            <div class="prj-card">
+                <h2>Mani's n Makeup</h2>
+                <div class="scrolling-wrapper">
+                    <div class="img">
+                        <img src="1.jpg" style="height:50vh"/>
+                        <img src="2.jpg" style="height:50vh"/>
+                        <img src="3.jpg" style="height:50vh"/>
+                    </div>
+                </div>              
+                <p style="color: #333;">Nails and Makeup by Amy</p>
+            </div>
+        </section>
+
         <div class="hero">
             <div id="calendar"></div>
+            <div class="btnFuncs">
+                <!--<button class="btn-action" id="btnView">VIEW APPOINTMENTS</button>
+                <button class="btn-action" id="btnCancel">CANCEL APPOINTMENT</button>-->
+            </div>
         </div>
 
         <div class="add" id="add">
@@ -133,9 +152,29 @@
             </div>
         </div>
 
-        <div class="view" id="view">
-
-        </div>
+            <div class="hero" id="view">
+                <div class="table">
+                    <section class="table_header">
+                        <h1>Appointments</h1>
+                    </section>
+                    <section class="table_body">
+                        <table id="tableAppt">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Service</th> 
+                                    <th>Notes</th>
+                                    <th>Cancel</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                                
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
     </main>
 
 
@@ -153,6 +192,8 @@
             "July", "August", "September", "October", "November", "December"];
 
         function getAppointments() {
+
+            fetch("appointments.json");
             
             $.getJSON('appointments.json', function (json) {
                 var array = [];
@@ -172,10 +213,13 @@
             });
         };
 
+        $("#btnView").click();
+
         $(document).ready(function () {
             $('#calendar').evoCalendar({
                 format: "MM dd, yyyy",
-                theme: 'Royal Navy'
+                theme: 'Royal Navy',
+                todayHighlight: true
             })
             
             $("#addBtn").click(function (a) {
@@ -187,9 +231,16 @@
                     id: document.getElementById("fclientName").value + "_" + document.getElementById("fapptDate").value + "_" + document.getElementById("fapptService").value
                 };
                 appointments.push(apptObj);
+                populateList(apptObj);
                 //saveAppointment(appointments);
 
                 $('#calendar').evoCalendar('addCalendarEvent', apptObj);
+
+                document.getElementById("fclientTime").value = "";
+                document.getElementById("fclientContact").value = "";
+                document.getElementById("fapptTime").value = "";
+
+                window.alert("Appointment added successfully!");
             });
 
             function parseDateToFormat(date) {
@@ -202,9 +253,9 @@
             }
 
             function saveAppointment(appt) {
-                const fs = require('fs');
-                const jsonString = JSON.stringify(appt);
-                fs.writeFile("./appointments.json", jsonString, 'utf8', function (err) {
+                const fs = require('https');
+                const jsonString = JSON.stringify(appt, null, 2);
+                fs.writeFile("appointments.json", jsonString, 'utf8', function (err) {
                     if (err) {
                         return console.log(err);
                     }
@@ -213,6 +264,78 @@
                 });
             }
 
+            function populateListFull() {
+                let tbody = document.getElementById("tbody");
+
+                appointments.forEach((appt) => {
+                    let row = document.createElement("tr");
+                    let td1 = document.createElement("td");
+                    td1.width = "20%";
+                    let td2 = document.createElement("td");
+                    td2.width = "20%";
+                    let td3 = document.createElement("td");
+                    td3.width = "20%";
+                    let td4 = document.createElement("td");
+                    td4.width = "20%";
+                    let btnCancel = document.createElement("button");
+                    btnCancel.textContent = "CANCEL";
+                    btnCancel.click(function() {
+                        appointments.pop(appt);
+                        $('#calendar').evoCalendar('removeCalendarEvent', appt.id);
+                        //tbody.remove(row);
+                    });
+                    btnCancel.width = "20%";
+
+                    td1.innerHTML = appt.name;
+                    td2.innerHTML = appt.date;
+                    td3.innerHTML = appt.type;
+                    td4.innerHTML = appt.description;
+
+                    row.appendChild(td1);
+                    row.appendChild(td2);
+                    row.appendChild(td3);
+                    row.appendChild(td4);
+                    row.appendChild(btnCancel);
+
+                    tbody.appendChild(row);
+                });
+            }
+
+            function populateList(appt) {
+                let tbody = document.getElementById("tbody");
+
+                let row = document.createElement("tr");
+                let td1 = document.createElement("td");
+                let td2 = document.createElement("td");
+                let td3 = document.createElement("td");
+                let td4 = document.createElement("td");
+                let btnCancel = document.createElement("button");
+                    btnCancel.textContent = "CANCEL";
+                    btnCancel.onclick = (function() {
+                        appointments.pop(appt);
+                        $('#calendar').evoCalendar('removeCalendarEvent', appt.id);
+                        row.parentNode.removeChild(row);
+                    });
+                    btnCancel.style.margin = "auto";
+                    btnCancel.style.display = "block";
+                td1.style.marginLeft = "40px";
+                td2.style.marginLeft = "40px";
+                td3.style.marginLeft = "40px";
+                td4.style.marginLeft = "40px";
+
+                td1.innerHTML = appt.name;
+                td2.innerHTML = appt.date;
+                td3.innerHTML = appt.type;
+                td4.innerHTML = appt.description;
+
+                row.appendChild(td1);
+                row.appendChild(td2);
+                row.appendChild(td3);
+                row.appendChild(td4);
+                row.appendChild(btnCancel);
+
+                tbody.appendChild(row);
+            }
             
         })
     </script>
@@ -262,17 +385,8 @@
             }
 
             requestAnimationFrame(animation);
-        }</script>
-    <script>function addAppointment(form) {
-
-            $('#calendar').evoCalendar('addCalendarEvent', {
-                name: document.getElementById("fclientName").value,
-                description: 'Time: ${document.getElementById("fapptTime").value} \nPrice: ${document.getElementById("fapptPrice").value} \nDeposit Paid: ${document.getElementById("fpaidDeposit").value} \nPaid In Full: ${document.getElementById("fpaidFull").value} \nClient Contact: ${document.getElementById("fclientContact").value}',
-                date: 'August 17, 2023',
-                type: document.getElementById("fapptService").value,
-                id: '${name}_${date}_${type}'
-            });
-        }</script>
+        }
+    </script>
 
     <script>flatpickr("#fapptTime", {
             enableTime: true,
