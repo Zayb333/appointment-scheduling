@@ -339,6 +339,10 @@ tbody tr:nth-child(even){
         height: 7%;
     }
 
+    header nav{
+        visibility: collapse;
+    }
+
     #dprj{
         height: 90vh;
     }
