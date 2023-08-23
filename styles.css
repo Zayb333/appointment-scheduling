@@ -46,10 +46,14 @@ header {
     color: #333;
     width: 100vw;
     position: fixed;
-    height: 7.6%;
+    height: fit-content;
     display: inline-block;
     overflow-y: auto;
     z-index: 999;
+}
+
+header nav{
+    visibility: collapse;
 }
 
 header p {
@@ -69,8 +73,8 @@ footer img {
     height: auto;
 }
 
-header:hover{
-    height: 18.5%;
+header:hover nav{
+    visibility: visible;
 }
 
 main {
@@ -336,11 +340,7 @@ tbody tr:nth-child(even){
     }
 
     header{
-        height: auto;
-    }
-
-    header nav{
-        visibility: collapse;
+        height: 6.9%;
     }
 
     #dprj{

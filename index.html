@@ -41,7 +41,7 @@
                     <div class="img">
                         <img src="1.jpg" style="height:50vh"/>
                         <img src="2.jpg" style="height:50vh"/>
-                        <img src="3.JPG" style="height:50vh"/>
+                        <img src="3.jpg" style="height:50vh"/>
                     </div>
                 </div>              
                 <p style="color: #333;">Nails and Makeup by Amy</p>
@@ -333,7 +333,7 @@
             $("#addBtn").click(function (a) {
                 var apptObj = {
                     name: document.getElementById("fclientName").value,
-                    description: "Time: " + document.getElementById("fapptTime").value + "\nPrice: " + document.getElementById("fapptPrice").value + "\nDeposit Paid: " + document.getElementById("fpaidDeposit").value + "\nPaid In Full: " + document.getElementById("fpaidFull").value + "\nClient Contact: " + document.getElementById("fclientContact").value,
+                    description: "Time: " + parseTimeToFormat(document.getElementById("fapptTime").value) + "\nPrice: " + document.getElementById("fapptPrice").value + "\nDeposit Paid: " + document.getElementById("fpaidDeposit").value + "\nPaid In Full: " + document.getElementById("fpaidFull").value + "\nClient Contact: " + document.getElementById("fclientContact").value,
                     date: parseDateToFormat(document.getElementById("fapptDate").value),
                     type: document.getElementById("fapptService").value,
                     id: document.getElementById("fclientName").value + "_" + document.getElementById("fapptDate").value + "_" + document.getElementById("fapptService").value
@@ -357,6 +357,68 @@
                 var day = date.substring(8);
 
                 return month + " " + day + ", " + year;
+            }
+
+            function parseTimeToFormat(time) {
+                if(toString(time).includes("pm") || toString(time).includes("am"))
+                    return toString(time);
+                
+                var hour = time.substring(0, 2);
+                var minute = time.substring(3);
+                var ampm = "am";
+                if(hour == "12"){
+                    ampm = "pm";
+                }
+                if(hour == "13"){
+                    hour = "1";
+                    ampm = "pm";
+                }
+                if(hour == "14"){
+                    hour = "2";
+                    ampm = "pm";
+                }
+                if(hour == "15"){
+                    hour = "3";
+                    ampm = "pm";
+                }
+                if(hour == "16"){
+                    hour = "4";
+                    ampm = "pm";
+                }
+                if(hour == "17"){
+                    hour = "5";
+                    ampm = "pm";
+                }
+                if(hour == "18"){
+                    hour = "6";
+                    ampm = "pm";
+                }
+                if(hour == "19"){
+                    hour = "7";
+                    ampm = "pm";
+                }
+                if(hour == "20"){
+                    hour = "8";
+                    ampm = "pm";
+                }
+                if(hour == "21"){
+                    hour = "9";
+                    ampm = "pm";
+                }
+                if(hour == "22"){
+                    hour = "10";
+                    ampm = "pm";
+                }
+                if(hour == "23"){
+                    hour = "11";
+                    ampm = "pm";
+                }
+                if(hour == "00"){
+                    hour = "12";
+                    ampm = "am";
+                }
+
+                return hour + ":" + minute + " " + ampm;
             }
 
             function saveAppointment(appt) {
@@ -459,7 +521,7 @@
                             var obj = appointments.find(a => a.id == appt.id)
                             {
                                 name: document.getElementById("pclientName").value;
-                                description: "Time: " + document.getElementById("papptTime").value + "\nPrice: " + document.getElementById("papptPrice").value + "\nDeposit Paid: " + document.getElementById("ppaidDeposit").value + "\nPaid In Full: " + document.getElementById("ppaidFull").value + "\nClient Contact: " + document.getElementById("pclientContact").value;
+                                description: "Time: " + parseTimeToFormat(document.getElementById("papptTime").value) + "\nPrice: " + document.getElementById("papptPrice").value + "\nDeposit Paid: " + document.getElementById("ppaidDeposit").value + "\nPaid In Full: " + document.getElementById("ppaidFull").value + "\nClient Contact: " + document.getElementById("pclientContact").value;
                                 date: parseDateToFormat(document.getElementById("papptDate").value);
                                 type: document.getElementById("papptService").value;
                                 id: document.getElementById("pclientName").value + "_" + document.getElementById("papptDate").value + "_" + document.getElementById("papptService").value;
@@ -495,7 +557,7 @@
                 td1.innerHTML = appt.name;
                 td2.innerHTML = appt.date;
                 td3.innerHTML = appt.type;
-                td5.innerHTML = _date.toLocaleString(); //(String(appt.description)).substring((String(appt.description)).indexOf("Time"), (String(appt.description)).indexOf("\nPrice")).replace("Time: ", "");
+                td5.innerHTML = (String(appt.description)).substring((String(appt.description)).indexOf("Time"), (String(appt.description)).indexOf("\nPrice")).replace("Time: ", ""); //(String(appt.description)).substring((String(appt.description)).indexOf("Time"), (String(appt.description)).indexOf("\nPrice")).replace("Time: ", "");
                 td4.innerHTML = appt.description;
 
                 row.appendChild(td1);
