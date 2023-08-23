@@ -11,13 +11,23 @@ body {
     background-attachment: fixed;
     background-size: cover;
 }
-
+ 
 .hero, .add, .view, #dprj {
     width: 100vw;
     height: 100vw;
     display: grid;
     place-items: center;
     
+}
+
+.hero .bf-body, .hero .table{
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.hero .bf-body{
+    z-index: 777;
+    background-color: #fff;
 }
 
 
@@ -40,6 +50,23 @@ header {
     display: inline-block;
     overflow-y: auto;
     z-index: 999;
+}
+
+header p {
+    color: #333;
+}
+
+footer{
+    position: fixed;
+    bottom: 0;
+    background-color: rgb(2, 126, 132, 0.8);
+    width: 100%;
+    visibility: collapse;
+}
+
+footer img {
+    width: 20px;
+    height: auto;
 }
 
 header:hover{
@@ -109,11 +136,15 @@ nav {
 
 h1 {
     font-size: 30px;
-    color: #fff;
+    color: #333;
 }
 
 p{
     color: #fff;
+}
+
+.bf-row p{
+    color: #333;
 }
 
 a{
@@ -126,23 +157,23 @@ a{
 }
 
 .bf-head p {
-    color: #115035;
+    color: #333;
 }
 
 .bf-head {
-    background-color: #141824;
+    background-color: rgb(2, 126, 132, 0.7);
     padding: 20px 15px;
 }
 
 .bf-footer {
     font-style: italic;
-    background-color: #141824;
+    background-color: rgb(2, 126, 132, 0.5);
     padding: 10px 5px;
 }
 
     input, textarea, select {
         width: 100%;
-        background-color: #141824;
+        background-color: rgb(2, 126, 132, 0.95);;
         border: none;
         outline: none;
         padding: 10px;
@@ -202,12 +233,12 @@ button.btn-action {
     min-height: 90vh;
     overflow-y: auto;
     padding: 20px 16px;
-    background-color: #1d2228;
+    background-color: rgb(248, 200, 220, 0.5);
 }
 
 .bf-body{
     width: 50vw;
-    background-color: #1d1d2c;
+    background-color: #fff9;
     z-index: 0;
 }
 
@@ -230,7 +261,7 @@ table, th, td{
 .table_header {
     width: 100%;
     height: 12%;
-    background-color: #141824;
+    background-color: rgb(2, 126, 132, 0.5);
     padding: .8rem 1rem;
 }
 
@@ -305,7 +336,7 @@ tbody tr:nth-child(even){
     }
 
     header{
-        height: 18.5%;
+        height: 6.75%;
     }
 
     #dprj{
@@ -315,6 +346,7 @@ tbody tr:nth-child(even){
     button.btn-action{
         font-size: 11px;
     }
+
 
     .table{
         width: 98vw;
@@ -328,6 +360,10 @@ tbody tr:nth-child(even){
     img{
         height: 100vw;
         width: auto;
+    }
+
+    footer{
+        visibility: visible;
     }
 /*
     tbody tr:hover{

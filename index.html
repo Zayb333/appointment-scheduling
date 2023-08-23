@@ -15,7 +15,7 @@
 </head>
 <body>
 
-    <div>
+    <div id="_header">
         <div style="display:inline-block;justify-content:left;max-width:2px;">
             <img src="mmlogo.png" style="height:auto;width:100px;background-color:transparent;" />
         </div>
@@ -41,7 +41,7 @@
                     <div class="img">
                         <img src="1.jpg" style="height:50vh"/>
                         <img src="2.jpg" style="height:50vh"/>
-                        <img src="3.JPG" style="height:50vh"/>
+                        <img src="3.jpg" style="height:50vh"/>
                     </div>
                 </div>              
                 <p style="color: #333;">Nails and Makeup by Amy</p>
@@ -153,6 +153,98 @@
         </div>
 
             <div class="hero" id="view">
+                <div class="bf-body" id="popupContainer" style="display: none;">
+
+                    <div class="bf-head">
+                        <h1>Modify Appointment</h1>
+                        <p>Edit the selected appointment</p>
+                    </div>
+    
+                    <div class="bf-body-box" onsubmit="editAppointment(this)">
+    
+                        <div class="bf-row" id="clientInfo">
+                            <div class="bf-col-6">
+                                <p>Client Name</p>
+                                <input type="text" bind="value:_pclientName" id="pclientName" />
+                            </div>
+                            <div class="bf-col-6">
+                                <p>Contact</p>
+                                <input type="text" bind="value:_pclientContact" id="pclientContact" />
+                            </div>
+                        </div>
+    
+                        <div class="bf-row" id="apptInfo">
+                            <div class="bf-col-6">
+                                <p>Date</p>
+                                <input type="date" bind="value:_papptDate" id="papptDate" />
+                            </div>
+                            <div class="bf-col-6">
+                                <p>Time</p>
+                                <input type="text" bind="value:_papptTime" id="papptTime" />
+                            </div>
+                        </div>
+    
+                        <div class="bf-row" id="serviceInfo">
+                            <div class="bf-col-6">
+                                <p>Service</p>
+                                <select type="date" bind="value:_papptService" id="papptService">
+                                    <option value="Hard Gel">Hard Gel</option>
+                                    <option value="Gel X">Gel X</option>
+                                    <option value="Hard Gel">Hard Gel</option>
+                                    <option value="Gel Polish Mani">Gel Polish Mani</option>
+                                    <option value="Brow Waxing">Brow Waxing</option>
+                                    <option value="Makeup - Soft Glam">Makeup - Soft Glam</option>
+                                    <option value="Makeup - Natural Glam">Makeup - Natural Glam</option>
+                                    <option value="Makeup - Full Glam">Makeup - Full Glam</option>
+                                    <option value="Makeup - Bridal Package">Makeup - Bridal Package</option>
+                                </select>
+                            </div>
+                            <div class="bf-col-6">
+                                <p>Price</p>
+                                <input type="text" bind="value:_papptPrice" id="papptPrice" />
+                            </div>
+                        </div>
+    
+                        <div class="bf-row" id="paymentInfo">
+                            <div class="bf-col-6">
+                                <p>Deposit Paid</p>
+                                <input type="checkbox" bind="value:_ppaidDeposit" id="ppaidDeposit" />
+                            </div>
+                            <div class="bf-col-6">
+                                <p>Paid In Full</p>
+                                <input type="checkbox" bind="value:ppaidFull" id="ppaidFull" />
+                            </div>
+                        </div>
+    
+                        <div class="bf-row" id="otherInfo">
+    
+                            <div class="bf-col-12">
+    
+                                <p>Notes</p>
+    
+                                <textarea bind="_papptNote" id="papptNote" cols="10" rows="2"></textarea>
+    
+                            </div>
+    
+                        </div>
+    
+                        <div class="bf-row" id="submitform">
+                            <div class="bf-col-3">
+                                <button class="btn-action" id="editCancelBtn">CANCEL</button>
+                                <button class="btn-action" id="editSubmitBtn">SAVE CHANGES</button>
+                            </div>
+                        </div>
+    
+                    </div>
+    
+    
+    
+                    <div class="bf-footer">
+                        <p>Manis n Makeup</p>
+                    </div>
+    
+    
+                </div>
                 <div class="table">
                     <section class="table_header">
                         <h1>Appointments</h1>
@@ -164,6 +256,7 @@
                                     <th>Client</th>
                                     <th>Date</th>
                                     <th>Service</th> 
+                                    <th>Time</th> 
                                     <th>Notes</th>
                                     <th>Cancel</th>
                                 </tr>
@@ -176,12 +269,25 @@
                 </div>
             </div>
     </main>
-
+    <footer class="footer">
+        <div>
+            <nav>
+                <a href="#calendar">
+                    <img src="calendar.png">
+                </a>
+                <a href="#add">
+                    <img src="add.png">
+                </a>
+                <a href="#view">
+                    <img src="viewappt.png">
+                </a>
+            </nav>
+        </div>
+    </footer>
 
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/evo-calendar@1.1.2/evo-calendar/js/evo-calendar.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="evo-calendar.js"></script>
 
@@ -221,6 +327,8 @@
                 theme: 'Royal Navy',
                 todayHighlight: true
             })
+
+            //getAppointments();
             
             $("#addBtn").click(function (a) {
                 var apptObj = {
@@ -236,12 +344,10 @@
 
                 $('#calendar').evoCalendar('addCalendarEvent', apptObj);
 
-                /*
-                document.getElementById("fclientTime").value = "";
-                document.getElementById("fclientContact").value = "";
-                document.getElementById("fapptTime").value = ""; */
-
                 window.alert("Appointment added successfully!");
+
+                var allInputs = document.querySelectorAll('input');
+                allInputs.forEach(singleInput => singleInput.value = '');
             });
 
             function parseDateToFormat(date) {
@@ -309,31 +415,96 @@
                 let td1 = document.createElement("td");
                 let td2 = document.createElement("td");
                 let td3 = document.createElement("td");
+                let td5 = document.createElement("td");
                 let td4 = document.createElement("td");
                 let btnCancel = document.createElement("button");
                     btnCancel.textContent = "CANCEL";
                     btnCancel.onclick = (function() {
-                        appointments.pop(appt);
-                        $('#calendar').evoCalendar('removeCalendarEvent', appt.id);
-                        row.parentNode.removeChild(row);
+                        if(window.confirm("Are you sure you want to cancel " + appt.name + "'s appointment on " + appt.date + "?")){
+                            appointments.pop(appt);
+                            $('#calendar').evoCalendar('removeCalendarEvent', appt.id);
+                            row.parentNode.removeChild(row);
+                        }
                     });
                     btnCancel.style.margin = "auto";
                     btnCancel.style.display = "block";
+                    btnCancel.style.width = "80%";
+                    btnCancel.style.overflow = "wrap";
+                    btnCancel.style.marginTop = "10px";
+
+                let btnEdit = document.createElement("button");
+                    btnEdit.textContent = "EDIT";
+                    btnEdit.onclick = function() {
+                        // Get references to buttons and form fields
+                        const addBtn = document.getElementById("addBtn");
+                        const editSubmitBtn = document.getElementById("editSubmitBtn");
+                        const editCancelBtn = document.getElementById("editCancelBtn");
+                        const popupContainer = document.getElementById("popupContainer");
+
+                        document.getElementById("pclientName").value = appt.name;
+                        document.getElementById("papptDate").value = appt.date;
+                        document.getElementById("papptService").value = appt.type;
+                        document.getElementById("pclientContact").value = (String(appt.description)).substring((String(appt.description)).indexOf("Contact")).replace("Contact: ", "");
+                        document.getElementById("papptTime").value = (String(appt.description)).substring((String(appt.description)).indexOf("Time"), (String(appt.description)).indexOf("\nPrice")).replace("Time: ", "");
+                        document.getElementById("papptPrice").value = (String(appt.description)).substring((String(appt.description)).indexOf("Price"), (String(appt.description)).indexOf("\Deposit")).replace("Price: ", "");
+                        document.getElementById("ppaidDeposit").value = Boolean((String(appt.description)).substring((String(appt.description)).indexOf("Paid"), (String(appt.description)).indexOf("\Paid")).replace("Paid: ", ""));
+                        document.getElementById("ppaidFull").value = Boolean((String(appt.description)).substring((String(appt.description)).indexOf("Full"), (String(appt.description)).indexOf("\Client")).replace("Full: ", ""));
+
+                        popupContainer.style.display = "block";
+
+                        // Add click event listener to the "SAVE CHANGES" button in the popup
+                        editSubmitBtn.addEventListener("click", () => {
+                            // Get values from the popup form and update the original form or perform other actions
+                            // You need to implement your own logic here.
+                            var obj = appointments.find(a => a.id == appt.id)
+                            {
+                                name: document.getElementById("pclientName").value;
+                                description: "Time: " + document.getElementById("papptTime").value + "\nPrice: " + document.getElementById("papptPrice").value + "\nDeposit Paid: " + document.getElementById("ppaidDeposit").value + "\nPaid In Full: " + document.getElementById("ppaidFull").value + "\nClient Contact: " + document.getElementById("pclientContact").value;
+                                date: parseDateToFormat(document.getElementById("papptDate").value);
+                                type: document.getElementById("papptService").value;
+                                id: document.getElementById("pclientName").value + "_" + document.getElementById("papptDate").value + "_" + document.getElementById("papptService").value;
+                            };
+                            
+                            td1.innerHTML = obj.name;
+                            td2.innerHTML = obj.date;
+                            td3.innerHTML = obj.type;
+                            td4.innerHTML = obj.description;
+                            // Hide the popup container after processing
+                            popupContainer.style.display = "none";
+
+                            window.alert("Complete!");
+                        });
+
+                        editCancelBtn.addEventListener("click", () => {
+                            popupContainer.style.display = "none";
+                        });
+                    }
+                    btnEdit.style.margin = "auto";
+                    btnEdit.style.display = "block";
+                    btnEdit.style.width = "80%";
+                    btnEdit.style.marginTop = "15px";
+
                 td1.style.marginLeft = "40px";
                 td2.style.marginLeft = "40px";
                 td3.style.marginLeft = "40px";
+                td5.style.marginLeft = "40px";
                 td4.style.marginLeft = "40px";
+
+                var _date = Date.parse((String(appt.description)).substring((String(appt.description)).indexOf("Time"), (String(appt.description)).indexOf("\nPrice")).replace("Time: ", ""));
 
                 td1.innerHTML = appt.name;
                 td2.innerHTML = appt.date;
                 td3.innerHTML = appt.type;
+                td5.innerHTML = _date.toLocaleString(); //(String(appt.description)).substring((String(appt.description)).indexOf("Time"), (String(appt.description)).indexOf("\nPrice")).replace("Time: ", "");
                 td4.innerHTML = appt.description;
 
                 row.appendChild(td1);
                 row.appendChild(td2);
                 row.appendChild(td3);
+                row.appendChild(td5);
                 row.appendChild(td4);
                 row.appendChild(btnCancel);
+                row.appendChild(btnEdit);
 
                 tbody.appendChild(row);
             }
@@ -341,6 +512,24 @@
         })
     </script>
 
+<script>
+    
+</script>
+
+    <script type = "text/javascript">
+        var lastScrollTop = 0;
+            navbar = document.getElementById("_header");
+            window.addEventListener("scroll", function(){
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if(scrollTop > lastScrollTop){
+                    navbar.style.top = "-60px";
+                }
+                else{
+                    navbar.style.top = "0";
+                }
+                lastScrollTop = scrollTop;
+            });
+    </script>
 
     <script>const navLinks = document.querySelectorAll('nav a');
 
