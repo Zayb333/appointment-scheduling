@@ -336,7 +336,7 @@ tbody tr:nth-child(even){
     }
 
     header{
-        height: 7%;
+        height: auto;
     }
 
     header nav{
